@@ -174,16 +174,17 @@
                 $result = $connection->query($query);
                 foreach($result as $row){
                     $query = "
-                        SELECT * FROM user 
-                        WHERE user_email = '".$row["customer_email"]."'
+                        SELECT * FROM orders 
+                        WHERE customer_email = '".$row["customer_email"]."'
+                        AND farmer_name = '".$row["farmer_name"]."'
                     ";
                     $userResult = $connection->query($query);
 
-                    $query = "
-                        SELECT * FROM farm_items 
-                        WHERE farmer_name = '".$row["farmer_name"]."'
-                    ";
-                    $farmItems = $connection->query($query);
+                    // $query = "
+                    //     SELECT * FROM farm_items 
+                    //     WHERE farmer_name = '".$row["farmer_name"]."'
+                    // ";
+                    // $farmItems = $connection->query($query);
 
                     echo '
                         <ol class="breadcrumb mt-4 mb-4 bg-light p-2 border">
@@ -204,27 +205,6 @@
                         ';
                     }
 
-                    foreach($farmItems as $itemData){
-                        echo '
-                            <h2 style="color:white">Product Details</h2>
-                            <table class="table table-bordered" style="color:white">
-                                <tr>
-                                    <th width="30%">Product Name</th>
-                                    <td width="70%" style="text-transform:capitalize">'.$itemData["item_name"].'</td>
-                                </tr>
-                                <tr>
-                                    <th width="30%">Product Category</th>
-                                    <td width="70%" style="text-transform:capitalize">'.$itemData["item_cat"].'</td>
-                                </tr>
-                                <tr>
-                                    <th width="30%">Farmer Name</th>
-                                    <td width="70%" style="text-transform:capitalize">'.$itemData["farmer_name"].'</td>
-                                </tr>
-                            </table>
-                            <br/>
-                        ';
-                    }
-
                     // <!-- USER DETAILS -->
 
                     foreach($userResult as $userData){
@@ -233,15 +213,27 @@
                             <table class="table table-bordered" style="color:white">
                                 <tr>
                                     <th width="30%">User Email Adress</th>
-                                    <td width="70%" style="text-transform:uppercase">'.$userData["user_email"].'</td>
+                                    <td width="70%" style="text-transform:uppercase">'.$userData["customer_email"].'</td>
                                 </tr>
                                 <tr>
                                     <th width="30%">User Name</th>
-                                    <td width="70%" style="text-transform:capitaformItemlize">'.$userData["user_name"].'</td>
+                                    <td width="70%" style="text-transform:capitalize">'.$userData["customer_address"].'</td>
+                                </tr>
+                            </table>
+                            <br>
+                            <h2 style="color:white">Product Details</h2>
+                            <table class="table table-bordered" style="color:white">
+                                <tr>
+                                    <th width="30%">Product Name</th>
+                                    <td width="70%" style="text-transform:capitalize">'.$userData["product_name"].'</td>
                                 </tr>
                                 <tr>
-                                    <th width="30%">User Name</th>
-                                    <td width="70%" style="text-transform:capitalize">'.$userData["user_address"].'</td>
+                                    <th width="30%">Product Quantity</th>
+                                    <td width="70%" style="text-transform:capitalize">'.$userData["quantity"].' Kg</td>
+                                </tr>
+                                <tr>
+                                    <th width="30%">Farmer Name</th>
+                                    <td width="70%" style="text-transform:capitalize">'.$userData["farmer_name"].'</td>
                                 </tr>
                             </table>
                             <br/>
@@ -270,7 +262,7 @@
                         <h2 style="color:white">Delivery Details</h2>
                         <table class="table table-bordered" style="color:white">
                             <tr>
-                                <th width="30%">Order Place On</th>
+                                <th width="30%">Order Placed On</th>
                                 <td width="70%">'.$row["item_placed_on"].'</td>
                             </tr>
                             <tr>
@@ -280,6 +272,10 @@
                             <tr>
                                 <th width="30%">Total Amount</th>
                                 <td width="70%">'.currencyArray().' '.$row["total_amount"].'</td>
+                            </tr>
+                            <tr>
+                                <th width="30%">Delivery Date</th>
+                                <td width="70%">'.$row["delivery_date"].'</td>
                             </tr>
                         </table>
                         <form method="post">

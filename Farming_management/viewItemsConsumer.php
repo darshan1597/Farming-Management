@@ -15,68 +15,56 @@
 
             $formData['farmerName'] = trim($_POST["farmerName"]);
 
-        if(empty($_POST["quantity"])){
+        if(empty($_POST["itemQuan"])){
             $error .= '<li>Quantity is Required</li>';
         }
         else{
             $totalItem = $_GET["total"];
-            if($_POST["quantity"] > $totalItem){
+            if($_POST["itemQuan"] > $totalItem){
                 $error .= '<li>Quantity Exceeded</li>';
             }
             else{
-                $formData['quantity'] = trim($_POST["quantity"]);
+                if($_POST["itemQuan"] < 0){
+                    $error .= '<li>Enter a Valid Number</li>';
+                }
+                else{
+                    $formData['itemQuan'] = trim($_POST["itemQuan"]);
+                }
             }
         }
 
         $formData['totAmount'] = $_POST['totAmount'];
     
         if($error == ''){
+            $data = array(
+                ':userEmail'         =>     $_SESSION['consumerEmail'],
+                ':userAddress'         =>     $_SESSION['consumerAddress'],
+                ':itemName'			=>   	$formData['itemName'],
+                ':quantity'		    =>   	$formData['itemQuan'],
+                ':farmerName'       =>      $formData['farmerName'],
+                ':itemAddedOn'	    =>   	getDateTime($connection),
+                ':totalAmount'	    =>   	$formData['totAmount'],
+                ':deliveryStatus'    =>     'Pending',
+                ':deliveryDate'      =>      ''
+            );
 
             $query = "
-                SELECT * FROM farm_items 
-                WHERE farmer_name = '".$formData['farmerName']."'
+                INSERT INTO orders 
+                (customer_email, customer_Address, product_name, quantity, farmer_name, item_placed_on, total_amount, delivery_status, delivery_date) 
+                VALUES (:userEmail, :userAddress, :itemName, :quantity, :farmerName, :itemAddedOn, :totalAmount, :deliveryStatus, :deliveryDate)
+            ";    
+            $statement = $connection->prepare($query);    
+            $statement->execute($data);
+
+            $query = "
+                UPDATE farm_items 
+                SET total_item = total_item - '".$formData['quantity']."' , 
+                item_updated_on = '".getDateTime($connection)."'
+                WHERE farmer_name = '".$formData['farmerName']."' 
             ";
-            $statement = $connection->prepare($query);
-            $statement->execute();
-
-            if ($statement->rowCount() > 0) {
-
-                foreach ($statement->fetchAll() as $farmItem) {
-
-                    if ($farmItem['total_item'] > 0) {
-
-                        $data = array(
-                            ':userEmail'         =>     $_SESSION['consumerEmail'],
-                            ':userAddress'         =>     $_SESSION['consumerAddress'],
-                            ':itemName'			=>   	$formData['itemName'],
-                            ':quantity'		    =>   	$formData['quantity'],
-                            ':farmerName'       =>      $formData['farmerName'],
-                            ':itemAddedOn'	    =>   	getDateTime($connection),
-                            ':totalAmount'	    =>   	$formData['totAmount'],
-                            ':deliveryStatus'    =>     'Pending',
-                            ':deliveryDate'      =>      ''
-                        );
-                
-                        $query = "
-                            INSERT INTO orders 
-                            (customer_email, customer_Address, product_name, quantity, farmer_name, item_placed_on, total_amount, delivery_status, delivery_date) 
-                            VALUES (:userEmail, :userAddress, :itemName, :quantity, :farmerName, :itemAddedOn, :totalAmount, :deliveryStatus, :deliveryDate)
-                        ";    
-                        $statement = $connection->prepare($query);    
-                        $statement->execute($data);
-
-                        $query = "
-                            UPDATE farm_items 
-                            SET total_item = total_item - '".$formData['quantity']."' , 
-                            item_updated_on = '".getDateTime($connection)."'
-                            WHERE farmer_name = '".$formData['farmerName']."' 
-                        ";
-                        $connection->query($query);
-            
-                        header('Location:viewItemsConsumer.php?msg=Order Placed Successfully');
-                    }
-                }
-            }
+            $connection->query($query);
+        
+            header('Location:viewItemsConsumer.php?msg=Order Placed Successfully');
         }
     }
 
@@ -207,7 +195,7 @@
                             <form method="post" enctype="multipart/form-data">
 
                                 <div class="mb-3">
-                                    <h5><label class="form-label">Farm Item Name</label></h5>
+                                    <h5><label class="form-label">Farm Product Name</label></h5>
                                     <div class="center">
                                         <input type="text" name="itemName" id="itemName" class="form-control" value="<?php echo $itemName ?>" readonly/>
                                     </div>
@@ -230,7 +218,7 @@
                                 <div class="mb-3">
                                     <h5><label class="form-label">How Many KG's</label></h5>
                                     <div class="center">
-                                        <input type="number" name="quantity" id="quantity" onkeyup="mult(this.value)" value="" class="form-control" />
+                                        <input type="number" name="itemQuan" id="itemQuan" onkeyup="mult(this.value)" value="" class="form-control" />
                                     </div>
                                 </div>
 
