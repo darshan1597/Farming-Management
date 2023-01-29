@@ -1,0 +1,99 @@
+<?php
+        if(isManagementLogin()){
+    ?>  
+            <body class="sb-nav-fixed" style="background-color:#0c192c;">
+                <nav class="sb-topnav navbar navbar-expand">
+                    <!-- Navbar Brand-->
+                    <a class="navbar-brand ps-3" href="managementServices.php" style="color:black;">Library System</a>
+                    <!-- Sidebar Toggle-->
+                    <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars" style="color:black;"></i></button>
+                    <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0"></form>
+                    <!-- Navbar-->
+                    <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw" style="color:black;"></i></a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="managementProfile.php">Profile</a></li>
+                                <li><a class="dropdown-item" href="managementChangePassword.php">Change Password</a></li>
+                                <li><a class="dropdown-item" href="setting.php">Setting</a></li>
+                                <li><a class="dropdown-item" href="managementLogout.php">Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+    
+                <div id="layoutSidenav">
+                    <div id="layoutSidenav_nav">
+                        <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+                            <div class="sb-sidenav-menu">
+                                <div class="nav" id="navBar">
+                                    <a class="nav-link text-black" href="bookCategory.php">Book Category</a>
+                                    <a class="nav-link text-black" href="bookAuthor.php">Book Authors</a>
+                                    <a class="nav-link text-black" href="bookRack.php">Book Rack</a>
+                                    <a class="nav-link text-black" href="book.php">View Books</a>
+                                    <a class="nav-link text-black" href="viewUsers.php">View Users</a>
+                                    <a class="nav-link text-black" href="issueBook.php">Issue Book</a>
+                                    <a class="nav-link text-black" href="managementLogout.php">Logout</a>        
+                                </div>
+                            </div>
+                            <div class="sb-sidenav-footer">
+                            
+                            </div>
+                        </nav>
+                    </div>
+                    <div id="layoutSidenav_content">
+                        <main>
+        <?php 
+        }
+        elseif(isUserLogin()){
+        ?>
+            <body class="sb-nav-fixed" style="background-color:#0c192c;">
+                <nav class="sb-topnav navbar navbar-expand">
+                    <!-- Navbar Brand-->
+                    <a class="navbar-brand ps-3" href="issueBookDetails.php" style="color:black;">Library System</a>
+                    <!-- Sidebar Toggle-->
+                    <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars" style="color:black;"></i></button>
+                    <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0"></form>
+                    <!-- Navbar-->
+                    <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw" style="color:black;"></i></a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="userProfile.php">Profile</a></li>
+                                <li><a class="dropdown-item" href="userChangePassword.php">Change Password</a></li>
+                                <li><a class="dropdown-item" href="userLogout.php">Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+    
+                <div id="layoutSidenav">
+                    <div id="layoutSidenav_nav">
+                        <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+                            <div class="sb-sidenav-menu">
+                                <div class="nav">
+                                    <a class="nav-link text-black" href="searchBook.php">Search Books</a>        
+                                    <a class="nav-link text-black" href="userLogout.php">Logout</a>        
+                                </div>
+                            </div>
+                            <div class="sb-sidenav-footer">
+                            
+                            </div>
+                        </nav>
+                    </div>
+                    <div id="layoutSidenav_content">
+                        <main>
+                            <div class="welcome">
+                                <h1 style="color: #0c192c;background:#07F9A6;border-radius:50px;padding:10px;margin-top:15px">Welcome <?php echo $_SESSION['userName'] ?></h1>
+                            </div>
+        <?php
+        }
+        else{
+        ?>
+
+
+
+
+<?php
+        }
+        ?>
